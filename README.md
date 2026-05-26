@@ -1,36 +1,46 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Portfolio Allocation Tool
 
-## Getting Started
+Aplicação desktop-first para apoio de alocação de portfólio, com foco inicial em alocação macro entre:
 
-First, run the development server:
+- Renda Fixa
+- FIIs
+- Ações
+
+Todos os textos e formatos exibidos para o usuário seguem pt-BR.
+
+## Execução local
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
+pnpm install
 pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Abra http://localhost:3000 no navegador.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Qualidade e validação
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+pnpm check
+pnpm lint
+pnpm test
+```
 
-## Learn More
+- `pnpm check`: typecheck com `tsc --noEmit`
+- `pnpm lint`: regras de lint do projeto
+- `pnpm test`: suíte de testes unitários com Vitest
 
-To learn more about Next.js, take a look at the following resources:
+## Escopo implementado (macro)
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- Estado de entrada com persistência em `localStorage`
+- Modos `depositOnly` e `rebalance` com teto de vendas
+- Motor de cálculo macro com invariantes testadas
+- Formatação e parsing de valores no padrão pt-BR
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Checklist manual (step 6)
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+1. Abrir o app e preencher aporte, valores atuais e metas com vírgula decimal (ex.: `1.230,99`).
+2. Confirmar que os campos reformatam para padrão pt-BR ao perder foco.
+3. Confirmar que modo `depositOnly` desabilita o limite de vendas.
+4. Alterar para `rebalance` e validar impacto do teto de vendas no status do resultado.
+5. Recarregar a página e confirmar que os dados persistem.
+6. Usar "Restaurar valores padrão" e verificar retorno aos defaults.

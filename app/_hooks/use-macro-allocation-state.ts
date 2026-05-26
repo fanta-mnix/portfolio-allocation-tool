@@ -18,11 +18,35 @@ function clampNonNegative(value: number): number {
 }
 
 export function useMacroAllocationState() {
-  const [state, setState] = useState(() => loadMacroAllocationState());
+  const [state, setState] = useState(DEFAULT_MACRO_ALLOCATION_STATE);
+  const [isStorageHydrated, setIsStorageHydrated] = useState(false);
 
   useEffect(() => {
+    let isCancelled = false;
+
+    queueMicrotask(() => {
+      if (isCancelled) {
+        return;
+      }
+
+      const persistedState = loadMacroAllocationState();
+
+      setState(persistedState);
+      setIsStorageHydrated(true);
+    });
+
+    return () => {
+      isCancelled = true;
+    };
+  }, []);
+
+  useEffect(() => {
+    if (!isStorageHydrated) {
+      return;
+    }
+
     saveMacroAllocationState(state);
-  }, [state]);
+  }, [isStorageHydrated, state]);
 
   function updateDepositAmount(nextValue: number) {
     setState((previousState) => ({
@@ -75,6 +99,7 @@ export function useMacroAllocationState() {
 
   return {
     state,
+    isStorageHydrated,
     targetAllocationTotal,
     updateDepositAmount,
     updateMaxSellAmount,
